@@ -1,0 +1,60 @@
+[
+	{"type"    : "SLIDER",
+	 "pos"     : "{200,50,400,100}",
+	 "val"     : "{-7,50,5}",
+	 "varStr"  : ["BALL","G"],
+	 "title"   : "Gravity",
+	 "font"    : "ASSET.fonts.JosefinSans.SemiBold",
+	 "fntSCL"  : "{2,2}",
+	 "img"     : "ASSET.sprites.slider"
+	},
+	{
+	"type"    : "SLIDER",
+	 "pos"     : "{0,winH-100,400,100}",
+	 "val"     : "{-1,5,1}",
+	 "varStr"  : ["BALL","pTimeMult"],
+	 "title"   : "Time",
+	 "font"    : "ASSET.fonts.JosefinSans.SemiBold",
+	 "fntSCL"  : "{2,2}",
+	 "img"     : "ASSET.sprites.slider"
+	},
+	{"type"    : "TOGGLE",
+	 "pos"     : "{winW - 100,winH  - 100,100,100}",
+	 "val"     : true,
+	 "varStr"  : ["BALL","doPhysUp"],
+	 "title"   : "Moving",
+	 "font"    : "ASSET.fonts.JosefinSans.Regular",
+	 "fntSCL"  : "{1.2,1.2}",
+	 "img"     : "ASSET.sprites.button"
+	},
+	
+	{"type"    : "BUTTON",
+	 "pos"     : "{winW - 100,0,100,100}",
+	 "val"     : "function(held) if held then return; end local first = nil; local found = false; for k,v in pairs(ASSET.levels) do if not first then first = v; end if found then LEVEL.unload(); LEVEL.load(v); love.graphics.clear(); return; end if v==LEVEL.currentLevel then found = true; end end LEVEL.unload(); LEVEL.load(first); love.graphics.clear(); end",
+	 "varStr"  : null,
+	 "title"   : "Level\nCycle",
+	 "font"    : "ASSET.fonts.JosefinSans.Light",
+	 "fntSCL"  : "{1.5,1.5}",
+	 "img"     : "ASSET.sprites.button"
+	},
+	
+	{"type"    : "BUTTON",
+	 "pos"     : "{winW - 100,200,100,100}",
+	 "val"     : "function(held) COMMAND.ZOOMIN.callback(false,false,held); end",
+	 "varStr"  : null,
+	 "title"   : "+",
+	 "font"    : "ASSET.fonts.JosefinSans.Regular",
+	 "fntSCL"  : "{5,5}",
+	 "img"     : "ASSET.sprites.button"
+	},
+	
+	{"type"    : "BUTTON",
+	 "pos"     : "{winW - 100,300,100,100}",
+	 "val"     : "function(held) COMMAND.ZOOMOUT.callback(false,false,held); end",
+	 "varStr"  : null,
+	 "title"   : "-",
+	 "font"    : "ASSET.fonts.JosefinSans.Regular",
+	 "fntSCL"  : "{5,5}",
+	 "img"     : "ASSET.sprites.button"
+	}
+]
