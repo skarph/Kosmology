@@ -129,6 +129,16 @@ function V.distTo(op1,op2)
 	return dist;
 end
 
+function V.dot(op1,op2)
+	if not(getmetatable(op1)==getmetatable(op2)) then error("Both tables must be vector-formated! [V.vectorize("..tostring(op1)..")]"); end;
+	if not(op1.DIMCOUNT==op2.DIMCOUNT) then return nil; end;
+	local dotprod = 0
+	for i=1, op1.DIMCOUNT do
+		dotprod = dotprod + (op1[i] * op2[i]);
+	end
+	return dotprod
+end
+
 ------------------------------------------------------------------------------------
 M = {};
 M.__index = M;

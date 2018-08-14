@@ -42,7 +42,7 @@ function ASSET.load(p,upTable)--recursively loads all assets in path or main dir
 			elseif dataType == "GRAPHIC" then
 				upTable[indexName] = love.graphics.newImage(path.."/"..rPath);
 			elseif dataType == "FONT" then
-				upTable[indexName] = love.graphics.newFont(path.."/"..rPath);
+				upTable[indexName] = love.graphics.newFont(path.."/"..rPath,20);
 			elseif dataType == "LEVEL" then
 				upTable[indexName] = love.filesystem.read(path.."/"..rPath);
 			end

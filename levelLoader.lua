@@ -10,7 +10,7 @@ function LEVEL.load(string)
 		n = BALL.new(data[i].pos.x,data[i].pos.y,
 		data[i].rad,data[i].mass,
 		{data[i].color[1],data[i].color[2],data[i].color[3],data[i].color[4]}
-		,data[i].lock,data[i].img or ASSET.sprites.planet);
+		,data[i].lock,data[i].img or ASSET.sprites.planet,nil,data[i].player);
 		
 		BALL.list[n].vel = V.vectorize({data[i].vel.x,data[i].vel.y});--give velocity to the ball
 	end
