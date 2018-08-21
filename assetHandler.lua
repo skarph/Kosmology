@@ -6,7 +6,7 @@ ASSET.__EXT.SOUND = {"ogg"}
 ASSET.__EXT.GRAPHIC = {"png","jpg"};
 ASSET.__EXT.FONT = {"ttf"};
 ASSET.__EXT.LEVEL = {"json"};
-
+ASSET.PLANETCOUNT = 7;
 function ASSET.__getType(ext)
 	for k,v in pairs(ASSET.__EXT) do
 		for j,w in ipairs(ASSET.__EXT[k]) do
