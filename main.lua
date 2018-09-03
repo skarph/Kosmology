@@ -21,7 +21,7 @@ function love.load()
   	require("playerInterface");
 	require("gui");
 	require("assetHandler");
-	require("levelLoader");
+	require("levelLoader"); 
 	require("menuLoader");
 	require("console");
 	require("game");
@@ -32,6 +32,7 @@ function love.load()
 	love.graphics.setFont(ASSET.fonts.PressStart2P);
 	Joysticks = love.joystick.getJoysticks();
 	love.setDeprecationOutput( false );
+	love.window.setIcon(love.image.newImageData(ASSET.__DIR.."/sprites/icon.png"));
 end
 
 function love.quit()
@@ -66,7 +67,7 @@ function love.update(dt)
 		GTIME = 0.01;
 		GAMEMNG.PSTATE = {
 		{--Player 1
-		gun = 0,
+		gun = 1,
 		power = "",
 		flag = false,
 		flagt = 0.0,
@@ -77,7 +78,7 @@ function love.update(dt)
 		score = 0;
 		},
 		{--Player 2
-		gun = 0,
+		gun = 1,
 		power = "",
 		flag = false,
 		flagt = 0.0,
@@ -93,7 +94,7 @@ function love.update(dt)
 		GAMEMNG.POWCOUNT = 0;
 	end
 
-	if (GTIME < 0.1) then return; end
+	if (GTIME < 0.1) then INTROFADE = 1; return; end
 	
 	if didSomething then
 		PINTER.INACTIVETIME = PINTER.TIMEOUT;
@@ -110,28 +111,46 @@ function love.update(dt)
 end
 
 function love.draw()
+	love.graphics.setBlendMode("alpha", "premultiplied");
+	love.graphics.setColor(1,1,1,1-(INTROFADE));
+	love.graphics.draw(canvas);
+
 	love.graphics.setBlendMode("alpha", "alphamultiply");
-	INTROFADE = (0.1/(0.1+GTIME));
+	love.graphics.setColor((math.sin(GTIME/2)+1)/2,0,(math.sin(GTIME/2)+1)/2,0.1);
+	love.graphics.rectangle("fill",0,0,winW,winH);
+
+	love.graphics.setBlendMode("alpha", "alphamultiply");
 	if GTIME < 5 then
+		INTROFADE = (0.1/(0.1+GTIME));
+		if (GTIME < 0.1) then INTROFADE = 1; end
 		love.graphics.setColor({1,1,1,1*INTROFADE});
-		love.graphics.draw(ASSET.sprites.logo,(winW/2)-(ASSET.sprites.logo:getWidth()*6.5),(winH/2)-(ASSET.sprites.logo:getHeight()*10),0,13,20);
+		love.graphics.draw(ASSET.sprites.logo,(winW/2)-(ASSET.sprites.logo:getWidth()*6.5),(winH/2)-(ASSET.sprites.logo:getHeight()*10),0,13,13);
 		if GFRAME % 144 == 0 then
 			FLASH = (FLASH + 1) % 2
 		end
 		if FLASH == 1 then
-			love.graphics.print("PRESS A",(winW/2)-350,25,0,5,5);
+			love.graphics.print("PRESS A",(winW/2)-350,75,0,5,5);
 		end
-		love.graphics.print("A/B . . . . . BOOST\nX/Y . . . . . SHOOT\nL/R . . . . . SPECIAL\n\n\t  CAPTURE THE FLAG",(winW/2)-420,890,0,1.5,1.5);
-		love.graphics.print("[Max N; 2018]",0,winH-100,0,0.5,0.5);
+		love.graphics.print("\t\t\t\t\t\tCAPTURE THE FLAG\n\n\n\nA/B . . . . . BOOST\n\nX/Y . . . . . SHOOT\n\nL/R . . . . . SPECIAL",0,700,0,1.5,1.5);
+		love.graphics.print(" . . . . . FLAG\n\n . . . . . GUN-UP\n\n . . . . . WARPDRIVE\n\n . . . . . DRILL\n\n . . . . . MAGNET",(winW/2)+336,760,0,1.5,1.5);
+		love.graphics.draw(ASSET.sprites.flag,(winW/2)+304,754,0,2.5);
+		love.graphics.draw(ASSET.sprites.gun,(winW/2)+300,806,0,2.5);
+		love.graphics.draw(ASSET.sprites.bigthrust,(winW/2)+300,878,0,2.5);
+		love.graphics.draw(ASSET.sprites.drill0,(winW/2)+300,930,0,2.5);
+		love.graphics.draw(ASSET.sprites.gshot,(winW/2)+300,992,0,2.5);
+		love.graphics.print("[SPLOOPH 2018]",0,winH-12,0,0.5,0.5);
 	else
-		INTROFAD = 0;
+		INTROFADE = 0;
 	end
 
 	love.graphics.setCanvas(canvas);
+	
 	love.graphics.setBlendMode("subtract", "alphamultiply");
 	love.graphics.setColor(1,1,1,0.01);
 	love.graphics.rectangle('fill',0,0,winW,winH);
+	
 	love.graphics.setBlendMode("alpha", "alphamultiply");
+	love.graphics.setColor(1,1,1,1);
 	if BALL.doPhysUp then
 		for i, v in pairs(BALL.list) do
 			if BALL.list[i] then
@@ -141,10 +160,8 @@ function love.draw()
 	end
 	love.graphics.setCanvas();
 	
-	love.graphics.setBlendMode("alpha", "premultiplied");
-	love.graphics.draw(canvas);
 
-	love.graphics.setColor(1,1,1,1-(INTROFADE));
+	--love.graphics.setColor(1,1,1,1-(INTROFADE));
 	love.graphics.setBlendMode("alpha", "alphamultiply");
 	for i, v in pairs(BALL.list) do
 		if BALL.list[i] then
@@ -169,8 +186,8 @@ function love.draw()
 	CONSOLE.VALS.Time = string.format("%0.1f",GTIME);
 	CONSOLE.VALS.MemUse = string.format("%0.1f",collectgarbage('count')).."kB";
 	CONSOLE.VALS.ver = VER;
-	CONSOLE.VALS.fade = 1-(INTROFADE);
-	love.graphics.print(CONSOLE.getString());
+	CONSOLE.VALS.fade = (INTROFADE);
+	--love.graphics.print(CONSOLE.getString());
 	
 	--[[local vec = ((BALL.ballCenter-V.vectorize({winW/2,winH/2})))+V.vectorize({winW/2,winH/2});
 	love.graphics.setColor(1,1,0x00,0x7F);

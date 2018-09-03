@@ -109,7 +109,7 @@ end
 
 function PINTER.TURN(key, arg)
 	if(BALL.list[arg.player]) then
-		BALL.list[arg.player].vel = BALL.list[arg.player].vel*(1-(math.abs(arg.x)*0.01));
+		BALL.list[arg.player].vel = BALL.list[arg.player].vel*(1-(math.abs(arg.x)*0.005));
 		if GAMEMNG.PSTATE[arg.player].drtime > 0 then
 			BALL.list[arg.player].spin = arg.x * (2 * math.pi);
 		else
@@ -123,9 +123,12 @@ function PINTER.SPECIAL(key, arg)
 		if(GAMEMNG.PSTATE[arg.player].power == "gshot") then
 			local x1 = BALL.list[arg.player].pos[1] + (math.cos(BALL.list[arg.player].dir )*(BALL.list[arg.player].rad + 7)*BALL.ballScale);
 			local y1 = BALL.list[arg.player].pos[2] + (math.sin(BALL.list[arg.player].dir )*(BALL.list[arg.player].rad + 7)*BALL.ballScale);
-			local id1 = BALL.new(x1,y1,5,1,BALL.list[arg.player].color,nil,BALL.list[arg.player].img,nil,1,arg.player+2);
+			local id1 = BALL.new(x1,y1,5,1,BALL.list[arg.player].color,nil,ASSET.sprites.magnet,nil,1,arg.player+2);
 			BALL.list[id1].vel = BALL.list[arg.player].vel + (V.vectorize({math.cos(BALL.list[arg.player].dir),math.sin(BALL.list[arg.player].dir)})*250);
 			BALL.list[id1].speed = 250;
+			BALL.list[id1].spin = 0;
+			BALL.list[id1].quad = love.graphics.newQuad( 0, 0, ASSET.sprites.magnet:getWidth(), ASSET.sprites.magnet:getHeight(), ASSET.sprites.magnet:getWidth(), ASSET.sprites.magnet:getHeight());
+			BALL.list[id1].shadquad = BALL.list[id1].quad;
 			if(arg.player == 1) then
 				BALL.list[id1].seek = 2;
 			else

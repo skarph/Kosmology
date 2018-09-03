@@ -125,8 +125,15 @@ function BALL.update(self,dt)--UPDATE
 			self.vel = self.vel:norm()*self.speed
 		end
 	end
+	
+	if ((self.player==3) or (self.player==4)) and (self.vel:getMagnitude() ~= 0) then
+		self.dir = math.asin(self.vel[2]/self.vel:getMagnitude()) + (math.pi/2);
+	else
+		self.dir = self.dir+(dt*self.spin);
+	end
+	
 	self.acc = V.vectorize({0,0}); --reset acceleration
-	self.dir = self.dir+(dt*self.spin);
+
 	if not(self.iFrames==0) then --update invincibility
 		self.iFrames=self.iFrames-1;
 	end
@@ -371,7 +378,7 @@ function BALL.drawTrail(self,disp,scale)
 	local scale = scale or BALL.ballScale;
 	local x = (self.pos[1]*scale) +  disp[1];
 	local y = (self.pos[2]*scale) +  disp[2];
-	love.graphics.setColor(self.color[1],self.color[2],self.color[3], math.floor(1-(INTROFADE)) );
+	love.graphics.setColor(self.color[1],self.color[2],self.color[3], 1);
 	if self.power then
 		love.graphics.draw(self.img,self.quad,x,y,self.dir,(self.rad-1)*2/self.img:getWidth(),nil,self.img:getWidth()/2,self.img:getWidth()/2);
 		if self.power == "flag" then
